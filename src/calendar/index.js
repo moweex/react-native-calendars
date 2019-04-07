@@ -76,7 +76,9 @@ class Calendar extends Component {
     // Handler which gets executed when press arrow icon left. It receive a callback can go back month
     onPressArrowLeft: PropTypes.func,
     // Handler which gets executed when press arrow icon left. It receive a callback can go next month
-    onPressArrowRight: PropTypes.func
+    onPressArrowRight: PropTypes.func,
+
+    getCurrentDate: PropTypes.func,
   };
 
   constructor(props) {
@@ -96,7 +98,16 @@ class Calendar extends Component {
     this.addMonth = this.addMonth.bind(this);
     this.pressDay = this.pressDay.bind(this);
     this.longPressDay = this.longPressDay.bind(this);
+    this.getCurrentDate = this.getCurrentDate.bind(this);
     this.shouldComponentUpdate = shouldComponentUpdate;
+  }
+
+  componentDidMount(){
+    this.getCurrentDate();
+  }
+
+  getCurrentDate() {
+    this.props.getCurrentDate(xdateToData(this.state.currentMonth));
   }
 
   componentWillReceiveProps(nextProps) {
@@ -115,6 +126,7 @@ class Calendar extends Component {
     this.setState({
       currentMonth: day.clone()
     }, () => {
+      this.getCurrentDate();
       if (!doNotTriggerListeners) {
         const currMont = this.state.currentMonth.clone();
         if (this.props.onMonthChange) {

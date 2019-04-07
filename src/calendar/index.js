@@ -110,6 +110,14 @@ class Calendar extends Component {
     this.props.getCurrentDate(xdateToData(this.state.currentMonth));
   }
 
+  toggleCalendar() {
+    this.setState({
+      isCalendarVisible: !this.state.isCalendarVisible
+    }, () => {
+      this.forceUpdate()
+    })
+  }
+
   componentWillReceiveProps(nextProps) {
     const current= parseDate(nextProps.current);
     if (current && current.toString('yyyy MM') !== this.state.currentMonth.toString('yyyy MM')) {
@@ -254,6 +262,7 @@ class Calendar extends Component {
   }
 
   render() {
+    let { isCalendarVisible } = this.state
     const days = dateutils.page(this.state.currentMonth, this.props.firstDay);
     const weeks = [];
     while (days.length) {
@@ -269,6 +278,7 @@ class Calendar extends Component {
       }
     }
     return (
+      isCalendarVisible?
       <View style={[this.style.container, this.props.style]}>
         <CalendarHeader
           theme={this.props.theme}
@@ -285,7 +295,10 @@ class Calendar extends Component {
           onPressArrowRight={this.props.onPressArrowRight}
         />
         <View style={this.style.monthView}>{weeks}</View>
-      </View>);
+        
+      </View>
+      :<View/>
+      );
   }
 }
 

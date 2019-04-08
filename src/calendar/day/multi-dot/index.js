@@ -68,13 +68,16 @@ class Day extends Component {
       containerStyle.push(this.style.selected);
       textStyle.push(this.style.selectedText);
       if (marking.selectedColor) {
-        containerStyle.push({backgroundColor: marking.selectedColor});
+        containerStyle.push({borderColor: marking.selectedColor});
       }
     } else if (typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled') {
       textStyle.push(this.style.disabledText);
     } else if (this.props.state === 'today') {
       containerStyle.push(this.style.today);
       textStyle.push(this.style.todayText);
+    }
+    if(marking.textColor){
+      textStyle.push({color:marking.textColor})
     }
     return (
       <TouchableOpacity

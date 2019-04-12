@@ -301,12 +301,18 @@ class Calendar extends Component {
 
   render() {
     
-    let { isCalendarVisible, currentMonth, days, currentWeek } = this.state
+    let { isCalendarVisible, currentMonth, currentWeek } = this.state
+    let { calendarType } = this.props;
     const weeks = [];
-    //   while (days.length) {
-    weeks.push(this.renderWeek(currentWeek, weeks.length));
-    console.log('currentWeeks in render', weeks)
-    //  }
+     if(calendarType=='week'){
+      weeks.push(this.renderWeek(currentWeek, weeks.length));
+    }else{
+      const days = dateutils.page(currentMonth, this.props.firstDay);
+      while (days.length) {
+        weeks.push(this.renderWeek(days.splice(0, 7), weeks.length));
+      }
+    } 
+
     let indicator;
     const current = parseDate(this.props.current);
     if (current) {
@@ -323,7 +329,7 @@ class Calendar extends Component {
             theme={this.props.theme}
             hideArrows={this.props.hideArrows}
             month={this.state.currentMonth}
-            addMonth={true? this.addWeek: this.addMonth}
+            addMonth={this.props.calendarType=='week' ? this.addWeek: this.addMonth}
             showIndicator={indicator}
             firstDay={this.props.firstDay}
             renderArrow={this.props.renderArrow}

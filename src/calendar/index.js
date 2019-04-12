@@ -90,8 +90,13 @@ class Calendar extends Component {
     } else {
       currentMonth = XDate();
     }
+    let days = dateutils.page(currentMonth, this.props.firstDay);
+    let currentWeek = days.slice(0, 7);
     this.state = {
-      currentMonth
+      currentMonth,
+      days,
+      currentWeek,
+      currentWeekIndex:0
     };
 
     this.updateMonth = this.updateMonth.bind(this);
@@ -99,7 +104,7 @@ class Calendar extends Component {
     this.pressDay = this.pressDay.bind(this);
     this.longPressDay = this.longPressDay.bind(this);
     this.getCurrentDate = this.getCurrentDate.bind(this);
-    this.shouldComponentUpdate = shouldComponentUpdate;
+   // this.shouldComponentUpdate = shouldComponentUpdate;
   }
 
   componentDidMount(){
@@ -174,6 +179,24 @@ class Calendar extends Component {
     this.updateMonth(this.state.currentMonth.clone().addMonths(count, true));
   }
 
+  addWeek(count){
+    let { currentWeekIndex } = this.state;
+    if(count == -1){
+      currentWeekIndex = currentWeekIndex - 8
+    }else{
+      currentWeekIndex = currentWeekIndex + 8
+    }
+    console.log('currentWeekIndex now!', this.state.currentWeekIndex)
+    let { days } = this.state;
+    let currentWeek = days.slice(currentWeekIndex, currentWeekIndex+8);
+    this.setState({
+      currentWeek,
+      currentWeekIndex,
+    },()=>{
+      console.log('currentWeek now!', this.state.currentWeek)
+    })
+  }
+
   renderDay(day, id) {
     const minDate = parseDate(this.props.minDate);
     const maxDate = parseDate(this.props.maxDate);
@@ -219,16 +242,16 @@ class Calendar extends Component {
     }
 
     switch (this.props.markingType) {
-    case 'period':
-      return UnitDay;
-    case 'multi-dot':
-      return MultiDotDay;
-    case 'multi-period':
-      return MultiPeriodDay;
-    case 'custom':
-      return SingleDay;
-    default:
-      return Day;
+      case 'period':
+        return UnitDay;
+      case 'multi-dot':
+        return MultiDotDay;
+      case 'multi-period':
+        return MultiPeriodDay;
+      case 'custom':
+        return SingleDay;
+      default:
+        return Day;
     }
   }
 
@@ -262,43 +285,44 @@ class Calendar extends Component {
   }
 
   render() {
-    let { isCalendarVisible } = this.state
-    const days = dateutils.page(this.state.currentMonth, this.props.firstDay);
+    
+    let { isCalendarVisible, currentMonth, days, currentWeek } = this.state
     const weeks = [];
-    while (days.length) {
-      weeks.push(this.renderWeek(days.splice(0, 7), weeks.length));
-    }
+    //   while (days.length) {
+    weeks.push(this.renderWeek(currentWeek, weeks.length));
+    console.log('currentWeeks in render', weeks)
+    //  }
     let indicator;
     const current = parseDate(this.props.current);
     if (current) {
       const lastMonthOfDay = current.clone().addMonths(1, true).setDate(1).addDays(-1).toString('yyyy-MM-dd');
       if (this.props.displayLoadingIndicator &&
-          !(this.props.markedDates && this.props.markedDates[lastMonthOfDay])) {
+        !(this.props.markedDates && this.props.markedDates[lastMonthOfDay])) {
         indicator = true;
       }
     }
     return (
       isCalendarVisible?
-      <View style={[this.style.container, this.props.style]}>
-        <CalendarHeader
-          theme={this.props.theme}
-          hideArrows={this.props.hideArrows}
-          month={this.state.currentMonth}
-          addMonth={this.addMonth}
-          showIndicator={indicator}
-          firstDay={this.props.firstDay}
-          renderArrow={this.props.renderArrow}
-          monthFormat={this.props.monthFormat}
-          hideDayNames={this.props.hideDayNames}
-          weekNumbers={this.props.showWeekNumbers}
-          onPressArrowLeft={this.props.onPressArrowLeft}
-          onPressArrowRight={this.props.onPressArrowRight}
-        />
-        <View style={this.style.monthView}>{weeks}</View>
-        
-      </View>
-      :<View/>
-      );
+        <View style={[this.style.container, this.props.style]}>
+          <CalendarHeader
+            theme={this.props.theme}
+            hideArrows={this.props.hideArrows}
+            month={this.state.currentMonth}
+            addMonth={true? this.addWeek: this.addMonth}
+            showIndicator={indicator}
+            firstDay={this.props.firstDay}
+            renderArrow={this.props.renderArrow}
+            monthFormat={this.props.monthFormat}
+            hideDayNames={this.props.hideDayNames}
+            weekNumbers={this.props.showWeekNumbers}
+            onPressArrowLeft={this.props.onPressArrowLeft}
+            onPressArrowRight={this.props.onPressArrowRight}
+          />
+          <View style={this.style.monthView}>{weeks}</View>
+
+        </View>
+        :<View/>
+    );
   }
 }
 

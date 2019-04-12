@@ -149,6 +149,14 @@ class Calendar extends Component {
           this.props.onVisibleMonthsChange([xdateToData(currMont)]);
         }
       }
+      let days = dateutils.page(this.state.currentMonth, this.props.firstDay);
+      let currentWeek = days.slice(0, 7);
+      let currentWeekIndex = 0;
+      this.setState({
+        days,
+        currentWeek,
+        currentWeekIndex,
+      }) 
     });
   }
 
@@ -180,15 +188,22 @@ class Calendar extends Component {
   }
 
   addWeek(count){
-    let { currentWeekIndex } = this.state;
+    let { currentWeekIndex, days, currentWeek } = this.state;
     if(count == -1){
-      currentWeekIndex = currentWeekIndex - 8
+      if(currentWeekIndex-8 >=0){
+        currentWeekIndex = currentWeekIndex - 8
+      }else{
+        this.addMonth(-1);
+      }
     }else{
-      currentWeekIndex = currentWeekIndex + 8
+      if(currentWeekIndex+8 <= 24){
+        currentWeekIndex = currentWeekIndex + 8
+      }else{
+        this.addMonth(1);
+      }
     }
     console.log('currentWeekIndex now!', this.state.currentWeekIndex)
-    let { days } = this.state;
-    let currentWeek = days.slice(currentWeekIndex, currentWeekIndex+8);
+    currentWeek = days.slice(currentWeekIndex, currentWeekIndex+8);
     this.setState({
       currentWeek,
       currentWeekIndex,

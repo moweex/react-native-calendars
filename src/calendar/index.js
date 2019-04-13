@@ -108,11 +108,11 @@ class Calendar extends Component {
   }
 
   componentDidMount(){
-    this.getCurrentDate();
+      this.getCurrentDate();
   }
 
   getCurrentDate() {
-    this.props.getCurrentDate(xdateToData(this.state.currentMonth));
+    this.props.getCurrentDate(xdateToData(this.state.currentMonth), this.state.currentWeek);
   }
 
   toggleCalendar() {
@@ -139,7 +139,6 @@ class Calendar extends Component {
     this.setState({
       currentMonth: day.clone()
     }, () => {
-      this.getCurrentDate();
       if (!doNotTriggerListeners) {
         const currMont = this.state.currentMonth.clone();
         if (this.props.onMonthChange) {
@@ -156,6 +155,8 @@ class Calendar extends Component {
         days,
         currentWeek,
         currentWeekIndex,
+      },()=>{
+        this.getCurrentDate();
       }) 
     });
   }
@@ -209,6 +210,7 @@ class Calendar extends Component {
       currentWeekIndex,
     },()=>{
       console.log('currentWeek now!', this.state.currentWeek)
+      this.getCurrentDate();
     })
   }
 

@@ -188,7 +188,7 @@ class Calendar extends Component {
 
   updateWeek(currentWeekIndex){
     let { days, currentWeek } = this.state;
-    currentWeek = days.slice(currentWeekIndex, currentWeekIndex+8);
+    currentWeek = days.slice(currentWeekIndex, currentWeekIndex+7);
     this.setState({
       currentWeek,
       currentWeekIndex,
@@ -200,15 +200,15 @@ class Calendar extends Component {
   addWeek(count){
     let { currentWeekIndex } = this.state;
     if(count == -1){
-      if(currentWeekIndex-8 >=0){
-        currentWeekIndex = currentWeekIndex - 8
+      if(currentWeekIndex-7 >=0){
+        currentWeekIndex = currentWeekIndex - 7
         this.updateWeek(currentWeekIndex)
       }else{
         this.addMonth(-1);
       }
     }else{
-      if(currentWeekIndex+8 <= 24){
-        currentWeekIndex = currentWeekIndex + 8
+      if(currentWeekIndex+7 <= 24){
+        currentWeekIndex = currentWeekIndex + 7
         this.updateWeek(currentWeekIndex)
       }else{
         this.addMonth(1);

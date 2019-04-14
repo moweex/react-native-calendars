@@ -9,6 +9,7 @@ export default function getStyle(theme={}) {
     container: {
       paddingLeft: 5,
       paddingRight: 5,
+      paddingBottom:12,
       backgroundColor: appStyle.calendarBackground
     },
     monthView: {

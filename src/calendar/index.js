@@ -136,9 +136,17 @@ class Calendar extends Component {
     if (day.toString('yyyy MM') === this.state.currentMonth.toString('yyyy MM')) {
       return;
     }
+    let currentMonth = day.clone();
+    let days = dateutils.page(currentMonth, this.props.firstDay);
+    let currentWeek = days.slice(0, 7);
+    let currentWeekIndex = 0;
     this.setState({
-      currentMonth: day.clone()
+      currentMonth,
+      days,
+      currentWeek,
+      currentWeekIndex,
     }, () => {
+      this.getCurrentDate();
       if (!doNotTriggerListeners) {
         const currMont = this.state.currentMonth.clone();
         if (this.props.onMonthChange) {
@@ -148,16 +156,6 @@ class Calendar extends Component {
           this.props.onVisibleMonthsChange([xdateToData(currMont)]);
         }
       }
-      let days = dateutils.page(this.state.currentMonth, this.props.firstDay);
-      let currentWeek = days.slice(0, 7);
-      let currentWeekIndex = 0;
-      this.setState({
-        days,
-        currentWeek,
-        currentWeekIndex,
-      },()=>{
-        this.getCurrentDate();
-      }) 
     });
   }
 
@@ -188,30 +186,34 @@ class Calendar extends Component {
     this.updateMonth(this.state.currentMonth.clone().addMonths(count, true));
   }
 
+  updateWeek(currentWeekIndex){
+    let { days, currentWeek } = this.state;
+    currentWeek = days.slice(currentWeekIndex, currentWeekIndex+8);
+    this.setState({
+      currentWeek,
+      currentWeekIndex,
+    },()=>{
+      this.getCurrentDate();
+    })
+  }
+
   addWeek(count){
-    let { currentWeekIndex, days, currentWeek } = this.state;
+    let { currentWeekIndex } = this.state;
     if(count == -1){
       if(currentWeekIndex-8 >=0){
         currentWeekIndex = currentWeekIndex - 8
+        this.updateWeek(currentWeekIndex)
       }else{
         this.addMonth(-1);
       }
     }else{
       if(currentWeekIndex+8 <= 24){
         currentWeekIndex = currentWeekIndex + 8
+        this.updateWeek(currentWeekIndex)
       }else{
         this.addMonth(1);
       }
     }
-    console.log('currentWeekIndex now!', this.state.currentWeekIndex)
-    currentWeek = days.slice(currentWeekIndex, currentWeekIndex+8);
-    this.setState({
-      currentWeek,
-      currentWeekIndex,
-    },()=>{
-      console.log('currentWeek now!', this.state.currentWeek)
-      this.getCurrentDate();
-    })
   }
 
   renderDay(day, id) {

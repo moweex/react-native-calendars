@@ -79,6 +79,10 @@ class Day extends Component {
     if(marking.textColor){
       textStyle.push({color:marking.textColor})
     }
+    if(marking.pressed){
+      containerStyle.push([this.style.selected, { borderColor: marking.selectedColor && marking.selectedColor!='transparent' ? marking.selectedColor: '#0082b4' , backgroundColor: marking.selectedColor && marking.selectedColor!='transparent'  ? marking.selectedColor: '#0082b4' }]);
+      textStyle.push({color:'#ffffff'})
+    }
     return (
       <TouchableOpacity
         style={containerStyle}

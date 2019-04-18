@@ -72,12 +72,12 @@ class Day extends Component {
       }
     } else if (typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled') {
       textStyle.push(this.style.disabledText);
-    } else if (this.props.state === 'today') {
-      containerStyle.push(this.style.today);
-      textStyle.push(this.style.todayText);
-    }
+    } 
     if(marking.textColor){
       textStyle.push({color:marking.textColor})
+    }
+    if (this.props.state === 'today') {
+      textStyle.push(this.style.todayText);
     }
     if(marking.pressed){
       containerStyle.push([this.style.selected, { borderColor: marking.selectedColor && marking.selectedColor!='transparent' ? marking.selectedColor: '#0082b4' , backgroundColor: marking.selectedColor && marking.selectedColor!='transparent'  ? marking.selectedColor: '#0082b4' }]);

@@ -39,13 +39,19 @@ export default function(theme={}) {
       justifyContent: 'space-around'
     },
     dayHeader: {
-      marginTop: 2,
-      marginBottom: 7,
       width: 32,
       textAlign: 'center',
       fontSize: appStyle.textDayHeaderFontSize,
       fontFamily: appStyle.textDayHeaderFontFamily,
-      color: appStyle.textSectionTitleColor
+      color: '#6e6e6e',
+    },
+    borderStyle:{ 
+      marginLeft:10, 
+      marginRight:10, 
+      marginTop:10, 
+      marginBottom:5,  
+      borderBottomWidth:StyleSheet.hairlineWidth, 
+      color:'#e3e3e3'
     },
     ...(theme[STYLESHEET_ID] || {})
   });

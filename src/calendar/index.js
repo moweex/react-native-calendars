@@ -333,6 +333,7 @@ class Calendar extends Component {
             theme={this.props.theme}
             hideArrows={this.props.hideArrows}
             month={this.state.currentMonth}
+            calendarType={this.props.calendarType}
             addMonth={this.props.calendarType=='week' ? this.addWeek: this.addMonth}
             showIndicator={indicator}
             firstDay={this.props.firstDay}

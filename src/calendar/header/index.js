@@ -21,6 +21,7 @@ class CalendarHeader extends Component {
     renderArrow: PropTypes.func,
     hideDayNames: PropTypes.bool,
     weekNumbers: PropTypes.bool,
+    calendarType: PropTypes.string,
     onPressArrowLeft: PropTypes.func,
     onPressArrowRight: PropTypes.func
   };
@@ -57,6 +58,9 @@ class CalendarHeader extends Component {
       return true;
     }
     if (nextProps.hideDayNames !== this.props.hideDayNames) {
+      return true;
+    }
+    if(nextProps.calendarType !== this.props.calendarType){
       return true;
     }
     return false;
@@ -138,6 +142,11 @@ class CalendarHeader extends Component {
               <Text allowFontScaling={false} key={idx} accessible={false} style={this.style.dayHeader} numberOfLines={1} importantForAccessibility='no'>{day}</Text>
             ))}
           </View>
+        }
+        {
+          this.props.calendarType=='month'?
+          <View style={this.style.borderStyle}/>
+          :null
         }
       </View>
     );

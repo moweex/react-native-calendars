@@ -96,7 +96,8 @@ class Calendar extends Component {
       currentMonth,
       days,
       currentWeek,
-      currentWeekIndex:0
+      currentWeekIndex:0,
+      isCalendarVisible:true,
     };
 
     this.updateMonth = this.updateMonth.bind(this);

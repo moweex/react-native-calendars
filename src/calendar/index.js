@@ -18,6 +18,7 @@ import CalendarHeader from './header';
 import shouldComponentUpdate from './updater';
 import {SELECT_DATE_SLOT} from '../testIDs';
 
+
 //Fallback when RN version is < 0.44
 const viewPropTypes = ViewPropTypes || View.propTypes;
 
@@ -106,6 +107,30 @@ class Calendar extends Component {
     this.longPressDay = this.longPressDay.bind(this);
     this.getCurrentDate = this.getCurrentDate.bind(this);
    // this.shouldComponentUpdate = shouldComponentUpdate;
+  }
+
+  componentWillMount(){
+    let { days } = this.state;
+
+    let found = false
+    let currentWeekIndex = 0;
+    let i = 0;
+    while(!found){
+      if(i!=0){
+        currentWeekIndex = currentWeekIndex + 7
+      }
+      i++;
+      let currentWeek = days.slice(currentWeekIndex, currentWeekIndex+7)
+      for(let i in currentWeek){
+        if(dateutils.sameDate(currentWeek[i], XDate())){
+          found = true;
+          this.setState({
+            currentWeek,
+            currentWeekIndex: currentWeekIndex
+          })
+        }
+      }
+    }
   }
 
   componentDidMount(){
@@ -208,7 +233,7 @@ class Calendar extends Component {
         this.addMonth(-1);
       }
     }else{
-      if(currentWeekIndex+7 <= 24){
+      if(currentWeekIndex <= 24){
         currentWeekIndex = currentWeekIndex + 7
         this.updateWeek(currentWeekIndex)
       }else{

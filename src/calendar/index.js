@@ -240,7 +240,7 @@ class Calendar extends Component {
         this.addMonth(-1);
       }
     }else{
-      if(currentWeekIndex <= 24){
+      if(currentWeekIndex <= days.length - 14){
         currentWeekIndex = currentWeekIndex + 7
         this.updateWeek(currentWeekIndex)
       }else{

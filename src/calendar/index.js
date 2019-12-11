@@ -158,14 +158,21 @@ class Calendar extends Component {
     }
   }
 
-  updateMonth(day, doNotTriggerListeners) {
+  updateMonth(day, doNotTriggerListeners, count) {
     if (day.toString('yyyy MM') === this.state.currentMonth.toString('yyyy MM')) {
       return;
     }
     let currentMonth = day.clone();
     let days = dateutils.page(currentMonth, this.props.firstDay);
-    let currentWeek = days.slice(0, 7);
+    let currentWeek = [];
     let currentWeekIndex = 0;
+    if(count == -1){
+       currentWeek = days.slice(days.length-7, days.length);
+       currentWeekIndex = 28;
+    }else{
+       currentWeek = days.slice(0, 7);
+    }
+   
     this.setState({
       currentMonth,
       days,
@@ -209,7 +216,7 @@ class Calendar extends Component {
   }
 
   addMonth(count) {
-    this.updateMonth(this.state.currentMonth.clone().addMonths(count, true));
+    this.updateMonth(this.state.currentMonth.clone().addMonths(count, true), null, count);
   }
 
   updateWeek(currentWeekIndex){
@@ -330,7 +337,7 @@ class Calendar extends Component {
   }
 
   render() {
-    
+
     let { isCalendarVisible, currentMonth, currentWeek } = this.state
     let { calendarType } = this.props;
     const weeks = [];

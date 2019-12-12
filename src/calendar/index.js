@@ -167,8 +167,8 @@ class Calendar extends Component {
     let currentWeek = [];
     let currentWeekIndex = 0;
     if(count == -1){
-       currentWeek = days.slice(days.length-7, days.length);
-       currentWeekIndex = 28;
+       currentWeek = days.slice(days.length-14, days.length-7);
+       currentWeekIndex = days.length-14;
     }else{
        currentWeek = days.slice(0, 7);
     }
@@ -231,7 +231,7 @@ class Calendar extends Component {
   }
 
   addWeek(count){
-    let { currentWeekIndex } = this.state;
+    let { currentWeekIndex, days } = this.state;
     if(count == -1){
       if(currentWeekIndex-7 >=0){
         currentWeekIndex = currentWeekIndex - 7
@@ -240,7 +240,7 @@ class Calendar extends Component {
         this.addMonth(-1);
       }
     }else{
-      if(currentWeekIndex <= days.length - 14){
+      if(currentWeekIndex <= days.length - 21){
         currentWeekIndex = currentWeekIndex + 7
         this.updateWeek(currentWeekIndex)
       }else{
@@ -250,6 +250,7 @@ class Calendar extends Component {
   }
 
   renderDay(day, id) {
+    let { calendarType } = this.props;
     const minDate = parseDate(this.props.minDate);
     const maxDate = parseDate(this.props.maxDate);
     let state = '';
@@ -257,7 +258,7 @@ class Calendar extends Component {
       state = 'disabled';
     } else if ((minDate && !dateutils.isGTE(day, minDate)) || (maxDate && !dateutils.isLTE(day, maxDate))) {
       state = 'disabled';
-    } else if (!dateutils.sameMonth(day, this.state.currentMonth)) {
+    } else if (!dateutils.sameMonth(day, this.state.currentMonth) && calendarType=='month') {
       state = 'disabled';
     } else if (dateutils.sameDate(day, XDate())) {
       state = 'today';

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 import XDate from 'xdate';
 import dateutils from '../dateutils';
-import {xdateToData, parseDate} from '../interface';
+import {xdateToData, xdateToDataArray, parseDate} from '../interface';
 import styleConstructor from './style';
 import Day from './day/basic';
 import UnitDay from './day/period';
@@ -92,10 +92,12 @@ class Calendar extends Component {
       currentMonth = XDate();
     }
     let days = dateutils.page(currentMonth, this.props.firstDay);
+    let stringifiedDays = xdateToDataArray(days);
     let currentWeek = days.slice(0, 7);
     this.state = {
       currentMonth,
       days,
+      stringifiedDays,
       currentWeek,
       currentWeekIndex:0,
       isCalendarVisible:true,
@@ -138,7 +140,7 @@ class Calendar extends Component {
   }
 
   getCurrentDate() {
-    this.props.getCurrentDate(xdateToData(this.state.currentMonth), this.state.currentWeek);
+    this.props.getCurrentDate(xdateToData(this.state.currentMonth), this.state.currentWeek, this.state.stringifiedDays);
   }
 
   toggleCalendar() {
@@ -164,6 +166,7 @@ class Calendar extends Component {
     }
     let currentMonth = day.clone();
     let days = dateutils.page(currentMonth, this.props.firstDay);
+    let stringifiedDays = xdateToDataArray(days);
     let currentWeek = [];
     let currentWeekIndex = 0;
     if(count == -1){
@@ -178,6 +181,7 @@ class Calendar extends Component {
       days,
       currentWeek,
       currentWeekIndex,
+      stringifiedDays
     }, () => {
       this.getCurrentDate();
       if (!doNotTriggerListeners) {

@@ -18,6 +18,14 @@ function xdateToData(xdate) {
   };
 }
 
+function xdateToDataArray(xdateArr) {
+  let days = [];
+  xdateArr.forEach((item)=>{
+    days.push(item.toString('yyyy-MM-dd'))
+  })
+  return days;
+}
+
 function parseDate(d) {
   if (!d) {
     return;
@@ -38,6 +46,7 @@ function parseDate(d) {
 
 module.exports = {
   xdateToData,
+  xdateToDataArray,
   parseDate
 };
 

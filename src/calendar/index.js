@@ -126,10 +126,14 @@ class Calendar extends Component {
       for(let i in currentWeek){
         if(dateutils.sameDate(currentWeek[i], XDate())){
           found = true;
-          this.setState({
-            currentWeek,
-            currentWeekIndex: currentWeekIndex
-          })
+          if(currentWeekIndex == days.length-7){
+              this.addMonth(1)
+          }else{
+            this.setState({
+              currentWeek,
+              currentWeekIndex: currentWeekIndex
+            })
+          }
         }
       }
     }

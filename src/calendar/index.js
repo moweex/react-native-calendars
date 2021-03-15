@@ -126,14 +126,10 @@ class Calendar extends Component {
       for(let i in currentWeek){
         if(dateutils.sameDate(currentWeek[i], XDate())){
           found = true;
-          if(currentWeekIndex == days.length-7){
-              this.addMonth(1)
-          }else{
-            this.setState({
-              currentWeek,
-              currentWeekIndex: currentWeekIndex
-            })
-          }
+          this.setState({
+            currentWeek,
+            currentWeekIndex: currentWeekIndex
+          })
         }
       }
     }
@@ -168,16 +164,27 @@ class Calendar extends Component {
     if (day.toString('yyyy MM') === this.state.currentMonth.toString('yyyy MM')) {
       return;
     }
+    let previousMonth = dateutils.page(this.state.currentMonth, this.props.firstDay);
     let currentMonth = day.clone();
     let days = dateutils.page(currentMonth, this.props.firstDay);
     let stringifiedDays = xdateToDataArray(days);
     let currentWeek = [];
     let currentWeekIndex = 0;
-    if(count == -1){
-       currentWeek = days.slice(days.length-14, days.length-7);
-       currentWeekIndex = days.length-14;
-    }else{
-       currentWeek = days.slice(0, 7);
+    if(count == -1) {
+      if(days.length >= 35 && days[days.length-7].toString() == previousMonth[0].toString()) {
+        currentWeek = days.slice(days.length -14 , days.length-7);
+        currentWeekIndex = days.length > 35 ? 28 : 21;
+      } else {
+        currentWeek = days.slice(days.length-7, days.length);
+        currentWeekIndex = days.length >= 35 ? 28 : 21;
+      }
+    } else {
+     if(previousMonth.length >=35 && previousMonth.length <= days.length && previousMonth[previousMonth.length-7].toString() == days[0].toString()) {
+      currentWeek = days.slice(7 , 14);
+      currentWeekIndex = 7;
+     } else {
+      currentWeek = days.slice(0, 7);
+     }
     }
    
     this.setState({
@@ -248,7 +255,7 @@ class Calendar extends Component {
         this.addMonth(-1);
       }
     }else{
-      if(currentWeekIndex <= days.length - 21){
+      if(currentWeekIndex <= 14 && days.length <= 28 || currentWeekIndex <= 21 && days.length >= 35){
         currentWeekIndex = currentWeekIndex + 7
         this.updateWeek(currentWeekIndex)
       }else{
